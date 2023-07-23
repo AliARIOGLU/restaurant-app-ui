@@ -20,6 +20,7 @@ import React, { useState, useEffect } from "react";
 const CountDown = () => {
   let difference = +new Date(`10/10/2023`) - +new Date();
   const [delay, setDelay] = useState(difference);
+  const [mounted, setMounted] = useState(false);
 
   const d = Math.floor(difference / (1000 * 60 * 60 * 24));
   const h = Math.floor((difference / (1000 * 60 * 60)) % 24);
@@ -27,6 +28,7 @@ const CountDown = () => {
   const s = Math.floor((difference / 1000) % 60);
 
   useEffect(() => {
+    setMounted(true);
     const timer = setInterval(() => {
       setDelay(delay - 1);
     }, 1000);
@@ -38,7 +40,10 @@ const CountDown = () => {
     return () => {
       clearInterval(timer);
     };
-  });
+  }, [delay]);
+
+  if (!mounted) return null;
+
   return (
     <span className="font-bold text-5xl text-yellow-300">
       {d}:{h}:{m}:{s}
