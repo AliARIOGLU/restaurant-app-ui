@@ -1,7 +1,21 @@
-import { featuredProducts } from "@/data";
+import { ProductType } from "@/types/types";
 import Image from "next/image";
 
-const Featured = () => {
+const getData = async () => {
+  const res = await fetch("http://localhost:3000/api/products", {
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    throw new Error("[PRODUCTS_GET] Failed!!");
+  }
+
+  return res.json();
+};
+
+const Featured = async () => {
+  const featuredProducts: ProductType[] = await getData();
+
   return (
     <div className="w-screen overflow-x-scroll text-red-500">
       {/* WRAPPER */}
@@ -26,7 +40,7 @@ const Featured = () => {
               </h1>
               <p className="p-4 2xl:p-8">{item.desc}</p>
               <span className="text-xl font-bold">${item.price}</span>
-              <button className="bg-red-500 text-white p-2 rounded-md hover:text-red-500 hover:bg-white hover:border-2 border-red-500">
+              <button className="bg-red-500 text-white p-2 rounded-md hover:text-red-500 hover:bg-white/20 hover:shadow-md">
                 Add to Cart
               </button>
             </div>
